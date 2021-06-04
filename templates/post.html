@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Blog: {{consulta.title}}</title>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('{{consulta.img}}');max-height:470px">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto" data-aos="fade-down"
+      data-aos-easing="linear"
+      data-aos-duration="1500">
+        <div class="post-heading">
+          <h1>{{consulta.title}} </h1>
+          <h2 class="subheading">{{consulta.intro}} </h2>
+          <span class="meta">Posted by
+            <a href="#">{{consulta.autor}} </a>
+            on {{consulta.date}}</span>
+            <img alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Post Content -->
+<article data-aos="zoom-in-up" data-aos-duration="3000">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="container" style="padding-right: 10%;padding-left: 10%; ">
+          {{consulta.text|safe}}
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+<div class="container" style="padding:2%">
+  <div class="container" data-aos="zoom-in-up" data-aos-duration="3000">
+      <form action= "/{{consulta.id}}#last" method="POST">
+          {% csrf_token %}
+          <div class="form-floating">
+              <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px;max-width:700px" name="text"></textarea>
+          </div>
+          <button style="margin-top: 1%;" class="btn btn-dark" type="submit">Comentar</button>
+      </form> 
+      <br>
+  </div>
+
+  <div class="container" data-aos="zoom-in-up" data-aos-duration="3000">
+      <h3 style="font-size:20px;">Comentarios: <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16"><path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+      </svg> </span> <small class="text-muted">{{consulta.comentarios}} </small></p></h3>
+      {% if not vacio %}
+
+      {% for x in comentarios %}
+      {% if yo == x.user.username %}
+          <div class="d-flex flex-row-reverse">
+              <div class="card text-end" style="width:80%;margin:1%;background-color: rgb(245, 245, 245)">
+              <div class="card-body">
+                  <p style="font-size: 85%;"><span style="font-weight: 600;">Yo</span> <span style="font-size: 73%;">{{x.date}} </span><span style="font-size: 73%;">{{x.time}}</span></p>
+                  <p class="card-text">{{x.text}}</p>
+              </div>
+              </div>
+          </div>
+      {% else %}
+          <div class="normal">
+              <div class="card" style="width:80%;margin:1%;background-color: rgb(253, 253, 253)">
+              <div class="card-body">
+                  <p style="font-size: 85%;"><span style="font-weight: 600;">{{x.user}} </span> <span style="font-size: 73%;">{{x.date}} </span><span style="font-size: 73%;">{{x.time}}</span></p>
+                  <p class="card-text">{{x.text}}</p>
+              </div>
+              </div>
+          </div>
+      {% endif %}
+      {% endfor %}
+      <div class="conatiner" id="last">
+      </div>
+      {% else %}
+      <div class="comentario">
+          <div class="alert alert-warning" role="alert" style="text-align: center;">
+              No hay comentarios
+          </div>
+      </div>
+      {% endif %}
+  </div>
+</div>
+</div>
+<br>
+{% endblock %}
+  
